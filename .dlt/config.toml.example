@@ -1,0 +1,9 @@
+# dlt runtime configuration template
+# Copy to .dlt/config.toml to tune dlt execution behavior
+
+[runtime]
+log_level = "INFO"
+dlthub_telemetry = false
+
+[load]
+workers = 2

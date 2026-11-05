@@ -1,0 +1,101 @@
+# ==============================================================================
+# Pipeline Configuration: DummyJSON API Ingestion to Microsoft Fabric OneLake
+# ==============================================================================
+
+# Default active environment if not overridden by CLI (--env) or PIPELINE_ENV
+# Options: 'local' (DuckDB), 'local_filesystem' (Local Parquet), 'fabric' (OneLake)
+active_environment: "local"
+
+# ------------------------------------------------------------------------------
+# Core Pipeline Settings
+# ------------------------------------------------------------------------------
+pipeline:
+  name: "ecommerce_to_fabric_pipeline"
+  dataset_name: "bronze_ecommerce"
+  export_schema: true
+  schema_export_path: "schemas/export"
+
+# ------------------------------------------------------------------------------
+# Source Configuration: DummyJSON E-commerce REST API
+# ------------------------------------------------------------------------------
+source:
+  type: "dummyjson"
+  base_url: "https://dummyjson.com"
+
+  # Config-driven entities to extract
+  entities:
+    products:
+      enabled: true
+      write_disposition: "merge"
+      primary_key: "id"
+      page_size: 50
+      max_items: null # Set an integer (e.g. 10) to limit during dev/testing, or null for all
+
+    carts:
+      enabled: true
+      write_disposition: "merge"
+      primary_key: "id"
+      page_size: 20
+      max_items: null
+
+    users:
+      enabled: true
+      write_disposition: "merge"
+      primary_key: "id"
+      page_size: 50
+      max_items: null
+
+    categories:
+      enabled: true
+      write_disposition: "replace"
+      primary_key: "slug"
+      page_size: 100
+      max_items: null
+
+  # Resilience & Rate-limiting controls
+  resilience:
+    max_retries: 3
+    initial_backoff_seconds: 2
+    rate_limit_buffer: 50
+
+# ------------------------------------------------------------------------------
+# Destination Configurations
+# ------------------------------------------------------------------------------
+destinations:
+  # Local Development: DuckDB (zero-cloud setup for instant testing)
+  local:
+    destination_type: "duckdb"
+    database_path: ".data/ecommerce_local.duckdb"
+
+  # Local OneLake simulation: Writes raw Parquet mimicking OneLake folder layout
+  local_filesystem:
+    destination_type: "filesystem"
+    bucket_url: ".data/onelake_simulation/Files/bronze/ecommerce"
+    loader_file_format: "parquet"
+
+  # Production Target: Microsoft Fabric OneLake via ADLS Gen2 ABFSS endpoint
+  fabric:
+    destination_type: "filesystem"
+    
+    # Easiest for Free Trial: Copy full ABFS path from Fabric Lakehouse Properties
+    # (Fabric Lakehouse -> Files folder -> '...' -> Properties -> Copy 'ABFS path')
+    bucket_url: "${FABRIC_ONELAKE_ABFS_PATH}"
+    
+    # Alternatively, specify Workspace & Lakehouse GUIDs:
+    workspace_id: "${FABRIC_WORKSPACE_ID}"
+    lakehouse_id: "${FABRIC_LAKEHOUSE_ID}"
+    
+    # Path inside Lakehouse: 'Files/bronze/ecommerce' (raw files) or 'Tables/bronze_ecommerce'
+    target_path: "Files/bronze/ecommerce"
+    loader_file_format: "parquet"
+
+    # Credentials:
+    # For Free Trial (Organizational Account): Only onelake host is needed!
+    # az login session handles authentication automatically.
+    credentials:
+      azure_storage_account_name: "onelake"
+      azure_account_host: "onelake.blob.fabric.microsoft.com"
+      # Enterprise Service Principal (uncomment only if using App Registration):
+      # azure_tenant_id: "${AZURE_TENANT_ID}"
+      # azure_client_id: "${AZURE_CLIENT_ID}"
+      # azure_client_secret: "${AZURE_CLIENT_SECRET}"
