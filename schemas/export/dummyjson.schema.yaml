@@ -1,0 +1,558 @@
+version: 2
+version_hash: hHO5zFvKonvY1waUF6p6dsGgBQ7OGTNKHlBW0klzsBI=
+engine_version: 11
+name: dummyjson
+tables:
+  _dlt_version:
+    columns:
+      version:
+        data_type: bigint
+        nullable: false
+        description: Numeric version of the schema, incremented on each schema change
+      engine_version:
+        data_type: bigint
+        nullable: false
+        description: Version of the dlt schema engine that created this schema
+      inserted_at:
+        data_type: timestamp
+        nullable: false
+        description: Timestamp when this schema version was stored
+      schema_name:
+        data_type: text
+        nullable: false
+        description: Name of the schema
+      version_hash:
+        data_type: text
+        nullable: false
+        description: Unique hash of the schema content, used to detect changes
+      schema:
+        data_type: text
+        nullable: false
+        description: JSON representation of the complete schema definition
+    write_disposition: skip
+    resource: _dlt_version
+    description: Created by DLT. Tracks schema updates
+  _dlt_loads:
+    columns:
+      load_id:
+        data_type: text
+        nullable: false
+        precision: 64
+        description: Unique identifier of the load operation
+      schema_name:
+        data_type: text
+        nullable: true
+        description: Name of the schema associated with this load
+      status:
+        data_type: bigint
+        nullable: false
+        description: Status of the load operation (0 = success)
+      inserted_at:
+        data_type: timestamp
+        nullable: false
+        description: Timestamp when the load was completed
+      schema_version_hash:
+        data_type: text
+        nullable: true
+        description: Hash of the schema version used during this load
+    write_disposition: skip
+    resource: _dlt_loads
+    description: Created by DLT. Tracks completed loads
+  products:
+    columns:
+      id:
+        nullable: false
+        primary_key: true
+        data_type: bigint
+      title:
+        data_type: text
+        nullable: true
+      description:
+        data_type: text
+        nullable: true
+      category:
+        data_type: text
+        nullable: true
+      price:
+        data_type: double
+        nullable: true
+      discount_percentage:
+        data_type: double
+        nullable: true
+      rating:
+        data_type: double
+        nullable: true
+      stock:
+        data_type: bigint
+        nullable: true
+      brand:
+        data_type: text
+        nullable: true
+      sku:
+        data_type: text
+        nullable: true
+      weight:
+        data_type: bigint
+        nullable: true
+      warranty_information:
+        data_type: text
+        nullable: true
+      shipping_information:
+        data_type: text
+        nullable: true
+      availability_status:
+        data_type: text
+        nullable: true
+      return_policy:
+        data_type: text
+        nullable: true
+      minimum_order_quantity:
+        data_type: bigint
+        nullable: true
+      thumbnail:
+        data_type: text
+        nullable: true
+      meta__created_at:
+        data_type: timestamp
+        nullable: true
+      meta__updated_at:
+        data_type: timestamp
+        nullable: true
+      meta__barcode:
+        data_type: text
+        nullable: true
+      meta__qr_code:
+        data_type: text
+        nullable: true
+      dimensions__width:
+        data_type: double
+        nullable: true
+      dimensions__height:
+        data_type: double
+        nullable: true
+      dimensions__depth:
+        data_type: double
+        nullable: true
+      _dlt_load_id:
+        data_type: text
+        nullable: false
+      _dlt_id:
+        data_type: text
+        nullable: false
+        unique: true
+        row_key: true
+    file_format: parquet
+    write_disposition: merge
+    resource: products
+    x-normalizer:
+      seen-data: true
+  carts:
+    columns:
+      id:
+        nullable: false
+        primary_key: true
+        data_type: bigint
+      total:
+        data_type: double
+        nullable: true
+      discounted_total:
+        data_type: double
+        nullable: true
+      user_id:
+        data_type: bigint
+        nullable: true
+      total_products:
+        data_type: bigint
+        nullable: true
+      total_quantity:
+        data_type: bigint
+        nullable: true
+      _dlt_load_id:
+        data_type: text
+        nullable: false
+      _dlt_id:
+        data_type: text
+        nullable: false
+        unique: true
+        row_key: true
+    file_format: parquet
+    write_disposition: merge
+    resource: carts
+    x-normalizer:
+      seen-data: true
+  users:
+    columns:
+      id:
+        nullable: false
+        primary_key: true
+        data_type: bigint
+      first_name:
+        data_type: text
+        nullable: true
+      last_name:
+        data_type: text
+        nullable: true
+      maiden_name:
+        data_type: text
+        nullable: true
+      age:
+        data_type: bigint
+        nullable: true
+      gender:
+        data_type: text
+        nullable: true
+      email:
+        data_type: text
+        nullable: true
+      phone:
+        data_type: text
+        nullable: true
+      username:
+        data_type: text
+        nullable: true
+      password:
+        data_type: text
+        nullable: true
+      birth_date:
+        data_type: text
+        nullable: true
+      image:
+        data_type: text
+        nullable: true
+      blood_group:
+        data_type: text
+        nullable: true
+      height:
+        data_type: double
+        nullable: true
+      weight:
+        data_type: double
+        nullable: true
+      eye_color:
+        data_type: text
+        nullable: true
+      ip:
+        data_type: text
+        nullable: true
+      mac_address:
+        data_type: text
+        nullable: true
+      university:
+        data_type: text
+        nullable: true
+      ein:
+        data_type: text
+        nullable: true
+      ssn:
+        data_type: text
+        nullable: true
+      user_agent:
+        data_type: text
+        nullable: true
+      role:
+        data_type: text
+        nullable: true
+      crypto__coin:
+        data_type: text
+        nullable: true
+      crypto__wallet:
+        data_type: text
+        nullable: true
+      crypto__network:
+        data_type: text
+        nullable: true
+      company__department:
+        data_type: text
+        nullable: true
+      company__name:
+        data_type: text
+        nullable: true
+      company__title:
+        data_type: text
+        nullable: true
+      company__address__address:
+        data_type: text
+        nullable: true
+      company__address__city:
+        data_type: text
+        nullable: true
+      company__address__state:
+        data_type: text
+        nullable: true
+      company__address__state_code:
+        data_type: text
+        nullable: true
+      company__address__postal_code:
+        data_type: text
+        nullable: true
+      company__address__country:
+        data_type: text
+        nullable: true
+      company__address__coordinates__lat:
+        data_type: double
+        nullable: true
+      company__address__coordinates__lng:
+        data_type: double
+        nullable: true
+      bank__card_expire:
+        data_type: text
+        nullable: true
+      bank__card_number:
+        data_type: text
+        nullable: true
+      bank__card_type:
+        data_type: text
+        nullable: true
+      bank__currency:
+        data_type: text
+        nullable: true
+      bank__iban:
+        data_type: text
+        nullable: true
+      address__address:
+        data_type: text
+        nullable: true
+      address__city:
+        data_type: text
+        nullable: true
+      address__state:
+        data_type: text
+        nullable: true
+      address__state_code:
+        data_type: text
+        nullable: true
+      address__postal_code:
+        data_type: text
+        nullable: true
+      address__country:
+        data_type: text
+        nullable: true
+      address__coordinates__lat:
+        data_type: double
+        nullable: true
+      address__coordinates__lng:
+        data_type: double
+        nullable: true
+      hair__color:
+        data_type: text
+        nullable: true
+      hair__type:
+        data_type: text
+        nullable: true
+      _dlt_load_id:
+        data_type: text
+        nullable: false
+      _dlt_id:
+        data_type: text
+        nullable: false
+        unique: true
+        row_key: true
+    file_format: parquet
+    write_disposition: merge
+    resource: users
+    x-normalizer:
+      seen-data: true
+  categories:
+    columns:
+      slug:
+        nullable: false
+        primary_key: true
+        data_type: text
+      name:
+        data_type: text
+        nullable: true
+      url:
+        data_type: text
+        nullable: true
+      _dlt_load_id:
+        data_type: text
+        nullable: false
+      _dlt_id:
+        data_type: text
+        nullable: false
+        unique: true
+        row_key: true
+    write_disposition: replace
+    file_format: parquet
+    resource: categories
+    x-normalizer:
+      seen-data: true
+  _dlt_pipeline_state:
+    columns:
+      version:
+        data_type: bigint
+        nullable: false
+        description: Numeric version of the pipeline state
+      engine_version:
+        data_type: bigint
+        nullable: false
+        description: Version of the dlt state engine
+      pipeline_name:
+        data_type: text
+        nullable: false
+        description: Name of the pipeline this state belongs to
+      state:
+        data_type: text
+        nullable: false
+        description: Compressed JSON representation of the pipeline state
+      created_at:
+        data_type: timestamp
+        nullable: false
+        description: Timestamp when this state was created
+      version_hash:
+        data_type: text
+        nullable: true
+        description: Hash of the state content, used to detect changes
+      _dlt_load_id:
+        data_type: text
+        nullable: false
+        precision: 64
+        description: Load identifier linking this row to its load operation
+      _dlt_id:
+        data_type: text
+        nullable: false
+        unique: true
+        row_key: true
+    write_disposition: append
+    file_format: preferred
+    resource: _dlt_pipeline_state
+    x-normalizer:
+      seen-data: true
+  carts__products:
+    columns:
+      id:
+        data_type: bigint
+        nullable: true
+      title:
+        data_type: text
+        nullable: true
+      price:
+        data_type: double
+        nullable: true
+      quantity:
+        data_type: bigint
+        nullable: true
+      total:
+        data_type: double
+        nullable: true
+      discount_percentage:
+        data_type: double
+        nullable: true
+      discounted_total:
+        data_type: double
+        nullable: true
+      thumbnail:
+        data_type: text
+        nullable: true
+      _dlt_parent_id:
+        data_type: text
+        nullable: false
+        parent_key: true
+      _dlt_list_idx:
+        data_type: bigint
+        nullable: false
+      _dlt_id:
+        data_type: text
+        nullable: false
+        unique: true
+        row_key: true
+    parent: carts
+    x-normalizer:
+      seen-data: true
+  products__tags:
+    columns:
+      value:
+        data_type: text
+        nullable: true
+      _dlt_parent_id:
+        data_type: text
+        nullable: false
+        parent_key: true
+      _dlt_list_idx:
+        data_type: bigint
+        nullable: false
+      _dlt_id:
+        data_type: text
+        nullable: false
+        unique: true
+        row_key: true
+    parent: products
+    x-normalizer:
+      seen-data: true
+  products__reviews:
+    columns:
+      rating:
+        data_type: bigint
+        nullable: true
+      comment:
+        data_type: text
+        nullable: true
+      date:
+        data_type: timestamp
+        nullable: true
+      reviewer_name:
+        data_type: text
+        nullable: true
+      reviewer_email:
+        data_type: text
+        nullable: true
+      _dlt_parent_id:
+        data_type: text
+        nullable: false
+        parent_key: true
+      _dlt_list_idx:
+        data_type: bigint
+        nullable: false
+      _dlt_id:
+        data_type: text
+        nullable: false
+        unique: true
+        row_key: true
+    parent: products
+    x-normalizer:
+      seen-data: true
+  products__images:
+    columns:
+      value:
+        data_type: text
+        nullable: true
+      _dlt_parent_id:
+        data_type: text
+        nullable: false
+        parent_key: true
+      _dlt_list_idx:
+        data_type: bigint
+        nullable: false
+      _dlt_id:
+        data_type: text
+        nullable: false
+        unique: true
+        row_key: true
+    parent: products
+    x-normalizer:
+      seen-data: true
+settings:
+  detections:
+  - iso_timestamp
+  default_hints:
+    not_null:
+    - _dlt_id
+    - _dlt_root_id
+    - _dlt_parent_id
+    - _dlt_list_idx
+    - _dlt_load_id
+    parent_key:
+    - _dlt_parent_id
+    root_key:
+    - _dlt_root_id
+    unique:
+    - _dlt_id
+    row_key:
+    - _dlt_id
+normalizers:
+  names: snake_case
+  json:
+    module: dlt.common.normalizers.json.relational
+previous_hashes:
+- BRB7xvcvHrGyetTy2fyHC6b3KmUGyTZwRR/CXsUtHgg=
+- ClAZNrrSpi3xlTocvCone8uB5lU87XveiGy0oZ9kLc0=
